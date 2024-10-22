@@ -1,15 +1,13 @@
-require('dotenv').config();
-
-const express = require('express');
-const app = express();
-const { sql } = require('@vercel/postgres');
-
-const bodyParser = require('body-parser');
-const path = require('path');
+import { config } from 'dotenv';
+import express from 'express';
+import { sql } from '@vercel/postgres'
+import bodyParser from 'body-parser'
+import path from 'path'
 
 // Create application/x-www-form-urlencoded parser
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
+const app = express();
 app.use(express.static('public'));
 
 app.get('/', function (req, res) {
@@ -113,4 +111,4 @@ app.get('/allUsers', async (req, res) => {
 
 app.listen(3000, () => console.log('Server ready on port 3000.'));
 
-module.exports = app;
+export default app;
