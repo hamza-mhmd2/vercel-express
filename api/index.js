@@ -3,6 +3,11 @@ import express from 'express';
 import { sql } from '@vercel/postgres'
 import bodyParser from 'body-parser'
 import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __filenameNew = fileURLToPath(import.meta.url)
+
+const __dirname = path.dirname(__filenameNew)
 
 // Create application/x-www-form-urlencoded parser
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
