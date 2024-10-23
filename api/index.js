@@ -1,4 +1,4 @@
-import { config } from 'dotenv';
+import 'dotenv/config.js';
 import express from 'express';
 import mongoose from 'mongoose';
 import userAuth from '../routes/authRoute.js';
@@ -15,8 +15,6 @@ import session from 'cookie-session';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth2';  // Use import for Google OAuth2 Strategy
 import googledb from '../models/googleauth.js';
-
-config()
 
 const clientid = process.env.clientid;
 const clientsecret = process.env.clientsecret;
@@ -44,7 +42,7 @@ app.get('/uploadUser', function (req, res) {
 });
 
 app.get('/api/version', function (req, res) {
-    return res.json({ version: 3.1 })
+    return res.json({ version: 3.1, clientid: clientid })
 })
 
 app.post('/uploadSuccessful', urlencodedParser, async (req, res) => {
