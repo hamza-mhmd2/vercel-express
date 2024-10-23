@@ -1,9 +1,13 @@
 import { config } from 'dotenv';
 import express from 'express';
+import mongoose from 'mongoose';
+import userAuth from '../routes/authRoute.js';
+import rideRoutes from '../routes/rideRoutes.js';
 import { sql } from '@vercel/postgres'
 import bodyParser from 'body-parser'
 import path from 'path'
 import { fileURLToPath } from 'url'
+config()
 
 const __filenameNew = fileURLToPath(import.meta.url)
 
@@ -41,78 +45,22 @@ app.post('/uploadSuccessful', urlencodedParser, async (req, res) => {
     }
 });
 
-app.get('/allUsers', async (req, res) => {
-    try {
-        const users = await sql`SELECT * FROM Users;`;
-        if (users && users.rows.length > 0) {
-            let tableContent = users.rows
-                .map(
-                    (user) =>
-                        `<tr>
-                        <td>${user.id}</td>
-                        <td>${user.name}</td>
-                        <td>${user.email}</td>
-                    </tr>`
-                )
-                .join('');
+// ______________________________________ MY_ERVER ___________________________________________________________________________
 
-            res.status(200).send(`
-                <html>
-                    <head>
-                        <title>Users</title>
-                        <style>
-                            body {
-                                font-family: Arial, sans-serif;
-                            }
-                            table {
-                                width: 100%;
-                                border-collapse: collapse;
-                                margin-bottom: 15px;
-                            }
-                            th, td {
-                                border: 1px solid #ddd;
-                                padding: 8px;
-                                text-align: left;
-                            }
-                            th {
-                                background-color: #f2f2f2;
-                            }
-                            a {
-                                text-decoration: none;
-                                color: #0a16f7;
-                                margin: 15px;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <h1>Users</h1>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>User ID</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${tableContent}
-                            </tbody>
-                        </table>
-                        <div>
-                            <a href="/">Home</a>
-                            <a href="/uploadUser">Add User</a>
-                        </div>
-                    </body>
-                </html>
-            `);
-        } else {
-            res.status(404).send('Users not found');
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Error retrieving users');
-    }
-});
+app.use('/api/v1/rides', rideRoutes);
+app.use('/api/v1/auth', userAuth);
+
+
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000,  // Adjust the server selection timeout
+    socketTimeoutMS: 45000,          // Optional: Adjust socket timeout
+    connectTimeoutMS: 10000,         // Optional: Adjust connection timeout
+}).then(() => console.log('MongoDB connected...'))
+    .catch(err => console.error('MongoDB connection error:', err));
+
 
 app.listen(3000, () => console.log('Server ready on port 3000.'));
 
