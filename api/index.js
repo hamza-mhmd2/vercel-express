@@ -16,8 +16,12 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth2';  // Use import for Google OAuth2 Strategy
 import googledb from '../models/googleauth.js';
 
-const clientid = process.env.clientid;
-const clientsecret = process.env.clientsecret;
+const clientid = process.env.clientId;
+const clientsecret = process.env.clientSecret;
+
+
+console.log(`client id :: ${clientid} | secret : ${clientsecret}`);
+
 
 const __filenameNew = fileURLToPath(import.meta.url)
 
@@ -42,7 +46,7 @@ app.get('/uploadUser', function (req, res) {
 });
 
 app.get('/api/version', function (req, res) {
-    return res.json({ version: 3.1, clientid: clientid })
+    return res.json({ version: 3.3, clientid: clientid })
 })
 
 app.post('/uploadSuccessful', urlencodedParser, async (req, res) => {
