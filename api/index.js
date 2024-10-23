@@ -11,7 +11,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import { createServer } from 'http';  // Import http module
 import { Server } from 'socket.io';  // Import socket.io
-import session from 'express-session';
+import session from 'cookie-session';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth2';  // Use import for Google OAuth2 Strategy
 import googledb from '../models/googleauth.js';
@@ -44,7 +44,7 @@ app.get('/uploadUser', function (req, res) {
 });
 
 app.get('/api/version', function (req, res) {
-    return res.json({ version: 3 })
+    return res.json({ version: 3.1 })
 })
 
 app.post('/uploadSuccessful', urlencodedParser, async (req, res) => {
